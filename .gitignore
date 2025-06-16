@@ -1,0 +1,8 @@
+
+# ignore all .ipynb_checkpoints
+**/.ipynb_checkpoints/
+
+# ignore temp files or system files
+*.pyc
+__pycache__/
+.DS_Store
