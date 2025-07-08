@@ -4,6 +4,16 @@ from bs4 import BeautifulSoup
 
 
 def _extract_qa_from_file(file_path):
+    """
+    Extract question-answer pairs from a single MedQuAD XML file.
+
+    Args:
+        file_path (str): Path to the XML file.
+
+    Returns:
+        List[dict]: A list of dictionaries, each containing a QA pair with associated metadata.
+    """
+    
     with open(file_path, "r", encoding="utf-8") as file:
         soup = BeautifulSoup(file, "lxml-xml")
         doc = soup.find("Document")
@@ -37,6 +47,15 @@ def _extract_qa_from_file(file_path):
 
 
 def build_dataset(root_dir: str="../data/MedQuAD-master") -> pd.DataFrame:
+    """
+    Build a dataFrame of QA pairs from the MedQuAD dataset directory.
+
+    Args:
+        root_dir (str): Path to the MedQuAD XML data folder.
+
+    Returns:
+        pd.DataFrame: A DataFrame with flattened QA pairs and metadata.
+    """
     
     all_data = []
     

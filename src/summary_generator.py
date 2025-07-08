@@ -5,7 +5,8 @@ from typing import List, Tuple, Optional
 
 class SummaryGenerator:
     """
-    Generate medical summaries from a group of QA pairs using Llama3.
+    Generate clinically coherent summaries from medical QA pairs using a LLaMA 3.1 model via Ollama.
+    Designed for downstream MCQ generation with preserved clinical accuracy.
     """
 
     BASE_HEADER = """
@@ -21,9 +22,22 @@ class SummaryGenerator:
     """
 
     def __init__(self, model: str = "llama3.1"):
+        """
+        Args:
+            model (str): Name of the LLM served by Ollama.
+        """
         self.model = model
 
     def build_prompt(self, qa_pairs: List[Tuple[str, str]]) -> str:
+        """
+        Format the QA pairs into a prompt string for the LLM.
+
+        Args:
+            qa_pairs (List[Tuple[str, str]]): List of (question, answer) tuples.
+
+        Returns:
+            str: Prompt string to send to the model.
+        """
         prompt = self.BASE_HEADER + self.BASE_INSTRUCTION
         for i, (q, a) in enumerate(qa_pairs):
             prompt += f"Q{i+1}: {q}\nA{i+1}: {a}\n"
@@ -31,6 +45,15 @@ class SummaryGenerator:
         return prompt
 
     def generate_summary(self, qa_pairs: List[Tuple[str, str]]) -> Optional[str]:
+        """
+        Generate a medical summary from selected QA pairs.
+
+        Args:
+            qa_pairs (List[Tuple[str, str]]): List of (question, answer) tuples.
+
+        Returns:
+            Optional[str]: Summary text, or None if generation failed.
+        """
         if not qa_pairs:
             return None
 
